@@ -1,0 +1,58 @@
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FruitNourish</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .bg-blur {
+        background-color: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-br from-yellow-100 to-orange-200 min-h-screen">
+    
+    <header class="bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <div class="bg-green-500 p-2 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+          <span class="text-xl font-semibold text-gray-800">FruitNourish</span>
+        </div>
+        <nav class="space-x-6 text-sm font-medium text-gray-600">
+            <a href="{{ url_for('home') }}" class="hover:text-green-600">Home</a>
+            <a href="{{ url_for('about') }}" class="hover:text-green-600">About</a>
+            <a href="{{ url_for('prediction') }}" class="hover:text-green-600">Prediction</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="relative bg-cover bg-center py-24" style="background-image: url('/static/tropical-fruits-background-with-copyspace-with-fruits-leaf-copyspace.jpg');">
+      <div class="absolute inset-0 bg-yellow-100/40"></div>
+      <div class="relative z-10 container mx-auto px-4">
+        <div class="max-w-3xl mx-auto p-10 rounded-3xl shadow-xl bg-blur">
+          <h1 class="text-4xl font-bold text-green-800 mb-4 text-center">FruitNourish</h1>
+          <h2 class="text-xl font-semibold text-gray-700 mb-4 text-center">Prediction, Nutrition & Wellness Simplified</h2>
+          <p class="text-gray-800 text-center mb-6">
+            An intelligent platform that identifies fruits from images, analyzes their nutritional value,
+            and highlights their role in promoting health and managing common illnesses.
+          </p>
+          <div class="flex justify-center">
+            <a href="{{ url_for('prediction') }}">
+              <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition">Predict & Learn</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
+
+

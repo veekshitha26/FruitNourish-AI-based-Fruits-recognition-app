@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fruit Prediction - FruitNourish</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-blur {
+      background-color: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-yellow-100 to-orange-200 min-h-screen">
+
+  <!-- Navbar -->
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <div class="bg-green-500 p-2 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <span class="text-xl font-semibold text-gray-800">FruitNourish</span>
+      </div>
+      <nav class="space-x-6 text-sm font-medium text-gray-600">
+        <a href="{{ url_for('home') }}" class="hover:text-green-600">Home</a>
+        <a href="{{ url_for('about') }}" class="hover:text-green-600">About</a>
+        <a href="{{ url_for('prediction') }}" class="hover:text-green-600">Prediction</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Prediction Section -->
+  <section class="relative bg-cover bg-center py-24" style="background-image: url('/static/fruit-background.jpg');">
+    <div class="absolute inset-0 bg-yellow-100/40"></div>
+    <div class="relative z-10 container mx-auto px-4">
+      <div class="max-w-3xl mx-auto p-10 rounded-3xl shadow-xl bg-blur">
+        <h1 class="text-4xl font-bold text-green-800 mb-4 text-center">Fruit Prediction</h1>
+        <p class="text-gray-700 text-center mb-6">
+          Upload an image of a fruit, and our AI will identify it and provide nutritional details!
+        </p>
+
+        <!-- Upload Box -->
+        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+          <input type="file" id="uploadImage" class="hidden">
+          <label for="uploadImage" class="cursor-pointer block p-4 border-dashed border-2 border-gray-400 rounded-lg bg-gray-100 hover:bg-gray-200">
+            <p class="text-gray-600">Click to upload a fruit image</p>
+          </label>
+          <div id="preview" class="mt-4"></div>
+        </div>
+
+        <!-- Predict Button -->
+        <div class="flex justify-center mt-6">
+          <button id="predictBtn" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition">Predict</button>
+        </div>
+
+        <!-- Prediction Results -->
+        <div id="resultBox" class="hidden mt-6 p-4 bg-white rounded-lg shadow-md">
+          <h3 class="text-lg font-semibold text-green-800">Prediction Result:</h3>
+          <div id="resultText" class="text-gray-700 mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.getElementById("uploadImage").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("preview").innerHTML = `<img src="${e.target.result}" class="max-w-full h-auto rounded-lg shadow-md" />`;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById("predictBtn").addEventListener("click", function() {
+        let fileInput = document.getElementById("uploadImage").files[0];
+        if (!fileInput) {
+            alert("Please upload an image first!");
+            return;
+        }
+
+        let formData = new FormData();
+        formData.append("file", fileInput);
+
+        fetch("/predict", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            // show result box
+            document.getElementById("resultBox").classList.remove("hidden");
+            // build result HTML
+            let html = `<b>Fruit:</b> ${data.fruit} 🍎<br><b>Confidence:</b> ${(data.confidence*100).toFixed(2)}%`;
+            // nutritional info
+            if (data.nutrition && Object.keys(data.nutrition).length) {
+                html += `<br><b>Nutritional Information:</b><ul class="list-disc list-inside">`;
+                for (const [nutrient, value] of Object.entries(data.nutrition)) {
+                    html += `<li>${nutrient}: ${value}</li>`;
+                }
+                html += `</ul>`;
+            }
+            // health benefits
+            if (data.benefits && data.benefits.length) {
+                html += `<br><b>Helps With:</b><ul class="list-disc list-inside">`;
+                data.benefits.forEach(item => {
+                    html += `<li>${item}</li>`;
+                });
+                html += `</ul>`;
+            }
+            document.getElementById("resultText").innerHTML = html;
+        })
+        .catch(error => console.error("Error:", error));
+    });
+  </script>
+
+</body>
+</html>
