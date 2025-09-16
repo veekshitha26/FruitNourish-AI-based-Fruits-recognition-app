@@ -1,0 +1,19 @@
+name: fruit_nourish_app
+description: Fruit prediction app using Flutter and Flask backend
+version: 1.0.0
+
+environment:
+  sdk: ">=2.17.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^0.13.6
+  image_picker: ^0.8.4+2
+  path_provider: ^2.0.12
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/food-fruit-265237.jpeg
+    - assets/images/flat-lay-fruit-assortement-with-copy-space.jpg
