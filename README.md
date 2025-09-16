@@ -17,6 +17,7 @@ This project includes a Flask backend, a web application, and a Flutter mobile a
 
 -Deployed on Render for online access.
 
+**VISIT :**    https://fruitnourish-ai-based-fruits-recognition.onrender.com/
 
 **Images**
 
